@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import cors from "cors";
 import dotenv from "dotenv";
 import { GetParticipants, PostParticipants } from "./routes/participants.js";
+import { Refresh } from "./validations.js";
 
 
 //Basic Config
@@ -26,6 +27,9 @@ export const messageCollection = db.collection("messages")
 PostParticipants(app)
 GetParticipants(app)
 
+setInterval(() => {
+    Refresh()
+}, process.env.REFRESH_TIME);
 
 app.listen(process.env.EXPRESS_PORT, ()=>{
     console.log('Running on http://localhost:'+process.env.EXPRESS_PORT)
