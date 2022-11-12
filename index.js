@@ -27,8 +27,9 @@ export const messageCollection = db.collection("messages")
 PostParticipants(app)
 GetParticipants(app)
 
+//Logout Refresher
 setInterval(() => {
-    Refresh()
+    Refresh(process.env.LOGOUT_TIME)
 }, process.env.REFRESH_TIME);
 
 app.listen(process.env.EXPRESS_PORT, ()=>{
