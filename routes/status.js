@@ -1,3 +1,4 @@
+import { userCollection } from "../index.js";
 import { headerUserSchema, Validator } from "../validations.js";
 
 export const PostStatus = (app)=> {
@@ -5,7 +6,7 @@ export const PostStatus = (app)=> {
     const user = req.headers.user.toLowerCase()
 
     //Header validation
-    const headerValidation = Validator(headerUserSchema, {headerUser: from})
+    const headerValidation = Validator(headerUserSchema, {headerUser: user})
     if (headerValidation){
         res.status(422).send(headerValidation)
         return
@@ -24,7 +25,7 @@ export const PostStatus = (app)=> {
 
     //insertion
     try {
-        await userCollection.update({}, { name, lastStatus: Date.now() })
+        await userCollection.update({name: user}, {$set: {lastStatus: Date.now()}})
         res.sendStatus(201)
     } catch (error) {
         res.sendStatus(500)

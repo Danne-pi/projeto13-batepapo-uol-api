@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { GetParticipants, PostParticipants } from "./routes/participants.js";
 import { Refresh } from "./validations.js";
 import { GetMessages, PostMessages } from "./routes/messages.js";
+import { PostStatus } from "./routes/status.js";
 
 
 //Basic Config
@@ -29,6 +30,7 @@ PostParticipants(app)
 GetParticipants(app)
 PostMessages(app)
 GetMessages(app)
+PostStatus(app)
 
 //Logout Refresher
 setInterval(() => {

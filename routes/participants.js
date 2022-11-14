@@ -4,13 +4,15 @@ import { userSchema, Validator } from "../validations.js";
 
 export const PostParticipants = (app)=> {
     app.post("/participants", async (req, res) => {
-    let name = req.body.name.toLowerCase()
+    let name = req.body.name
 
     //Requisition validation
     const validation = Validator(userSchema, {name})
     if (validation){
         res.status(422).send(validation)
         return
+    } else {
+        name = name.toLowerCase()        
     }
 
     //Case name already exists
