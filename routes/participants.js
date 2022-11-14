@@ -19,7 +19,7 @@ export const PostParticipants = (app)=> {
     try {
         const resp = await userCollection.findOne({name})
         if(resp){
-            res.status(409).send("Nome atualmente em uso")
+            res.status(409).send("This name is already taken")
             return
         }
     } catch (error) {

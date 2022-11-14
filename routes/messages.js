@@ -56,8 +56,20 @@ export const PostMessages = (app)=> {
 export const GetMessages = (app)=> {
     app.get("/messages", async (req, res) => {
         const limit = Number(req.query.limit)
-        const user = req.headers.user.toLowerCase()
+        let user = req.headers.user
+
+        //Header validation
+        const headerValidation = Validator(headerUserSchema, {headerUser: user})
+        if (headerValidation){
+            res.status(422).send(headerValidation)
+            return
+        } else {
+            user = user.toLowerCase()
+        }
+
+
         let resp
+        let list = []
         if(limit){
             resp = messageCollection.find({$or: [
                 {from: user},
@@ -75,7 +87,6 @@ export const GetMessages = (app)=> {
             .sort({_id:-1});
         }
         
-        let list = []
         await resp.forEach((user) => {
             list.push(user)
         })

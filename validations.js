@@ -13,11 +13,11 @@ export function Validator(validationSchema, requestObject){
 
 
 export const userSchema = joi.object({
-  name: joi.string().min(3).required()
+  name: joi.string().min(3).required().alphanum()
 });
 
 export const headerUserSchema = joi.object({
-  headerUser: joi.string().min(3).required()
+  headerUser: joi.string().min(3).required().alphanum()
 })
 
 
@@ -32,8 +32,6 @@ export const messageSchema = joi.object({
     }
 }),
 });
-
-
 
 export async function Refresh(timeout){
     const timeNow = Date.now()

@@ -3,13 +3,15 @@ import { headerUserSchema, Validator } from "../validations.js";
 
 export const PostStatus = (app)=> {
     app.post("/status", async (req, res) => {
-    const user = req.headers.user.toLowerCase()
+    let user = req.headers.user
 
     //Header validation
     const headerValidation = Validator(headerUserSchema, {headerUser: user})
     if (headerValidation){
         res.status(422).send(headerValidation)
         return
+    } else {
+        user = user.toLowerCase()
     }
 
     //Check for user status
@@ -25,8 +27,8 @@ export const PostStatus = (app)=> {
 
     //insertion
     try {
-        await userCollection.update({name: user}, {$set: {lastStatus: Date.now()}})
-        res.sendStatus(201)
+        await userCollection.updateOne({name: user}, {$set: {lastStatus: Date.now()}})
+        res.sendStatus(200)
     } catch (error) {
         res.sendStatus(500)
     }

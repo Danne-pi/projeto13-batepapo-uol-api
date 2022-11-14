@@ -32,7 +32,7 @@ PostMessages(app)
 GetMessages(app)
 PostStatus(app)
 
-//Logout Refresher
+//Logout Refresh
 setInterval(() => {
     Refresh(process.env.LOGOUT_TIME)
 }, process.env.REFRESH_TIME);
