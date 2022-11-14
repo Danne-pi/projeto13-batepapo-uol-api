@@ -6,7 +6,7 @@ import { headerUserSchema, messageSchema, Validator } from "../validations.js";
 export const PostMessages = (app)=> {
     app.post("/messages", async (req, res) => {
     const { to, text, type } = req.body;
-    const from = req.headers.user.toLowerCase()
+    const from = req.headers.user
 
     //Header validation
     const headerValidation = Validator(headerUserSchema, {headerUser: from})
@@ -38,7 +38,7 @@ export const PostMessages = (app)=> {
     //insertion
     try {
         await messageCollection.insertOne({
-            from,
+            from: from.toLowerCase(),
             to: to.toLowerCase(),
             text,
             type,
