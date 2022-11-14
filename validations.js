@@ -1,9 +1,39 @@
 import joi from "joi";
 import { userCollection } from "./index.js";
 
+
+export function Validator(validationSchema, requestObject){
+  const validation = validationSchema.validate(requestObject, { abortEarly: false });
+  if (validation.error) {
+      let erros
+      validation.error.details.forEach((detail) => {erros += detail.message+"\n"});
+      return erros
+  }
+}
+
+
 export const userSchema = joi.object({
-  user: joi.string().min(3).required()
+  name: joi.string().min(3).required()
 });
+
+export const headerUserSchema = joi.object({
+  headerUser: joi.string().min(3).required()
+})
+
+
+export const messageSchema = joi.object({
+  to: joi.string().required(),
+  text: joi.string().required(),
+  type: joi.string().required().custom((value, helper) => {
+    if (value === "message" || value === "private_message") {
+      return true
+    } else {
+      return helper.message("The field 'type' must be equal to 'message' or 'private_message' only!")
+    }
+}),
+});
+
+
 
 export async function Refresh(timeout){
     const timeNow = Date.now()

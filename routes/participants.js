@@ -1,28 +1,32 @@
 import { userCollection } from "../index.js";
-import { userSchema } from "../validations.js";
+import { userSchema, Validator } from "../validations.js";
 
 
 export const PostParticipants = (app)=> {
     app.post("/participants", async (req, res) => {
-    const { user } = req.body;
-    const validation = userSchema.validate({user}, { abortEarly: true });
-    if (validation.error) {
-        // let erros
-        // validation.error.details.map((detail) => {erros += detail.message+"\n"});
-        res.status(422).send(validation.error.details[0].message)
+    let name = req.body.name.toLowerCase()
+
+    //Requisition validation
+    const validation = Validator(userSchema, {name})
+    if (validation){
+        res.status(422).send(validation)
         return
     }
 
-
-    const resp = await userCollection.findOne({user})
-    if(resp){
-        res.status(409).send("Nome atualmente em uso")
-        return
-    }
-        
-
+    //Case name already exists
     try {
-        await userCollection.insertOne({ name: user, lastStatus: Date.now() })
+        const resp = await userCollection.findOne({name})
+        if(resp){
+            res.status(409).send("Nome atualmente em uso")
+            return
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+    //insertion
+    try {
+        await userCollection.insertOne({ name, lastStatus: Date.now() })
         res.sendStatus(201)
     } catch (error) {
         res.sendStatus(500)
@@ -33,5 +37,12 @@ export const PostParticipants = (app)=> {
 
 
 export const GetParticipants = (app)=> {
-    
+    app.get("/participants", async (req, res) => {
+        const resp = userCollection.find({})
+        let list = []
+        await resp.forEach((user) => {
+            list.push(user)
+        })
+        res.send(list)
+    });
 }

@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { GetParticipants, PostParticipants } from "./routes/participants.js";
 import { Refresh } from "./validations.js";
+import { GetMessages, PostMessages } from "./routes/messages.js";
 
 
 //Basic Config
@@ -26,6 +27,8 @@ export const messageCollection = db.collection("messages")
 //Routes
 PostParticipants(app)
 GetParticipants(app)
+PostMessages(app)
+GetMessages(app)
 
 //Logout Refresher
 setInterval(() => {
