@@ -38,8 +38,8 @@ export const PostMessages = (app)=> {
     //insertion
     try {
         await messageCollection.insertOne({
-            from: from.toLowerCase(),
-            to: to.toLowerCase(),
+            from,
+            to,
             text,
             type,
             time: dayjs().format("hh:mm:ss") 
@@ -63,8 +63,6 @@ export const GetMessages = (app)=> {
         if (headerValidation){
             res.status(422).send(headerValidation)
             return
-        } else {
-            user = user.toLowerCase()
         }
 
 
@@ -74,17 +72,15 @@ export const GetMessages = (app)=> {
             resp = messageCollection.find({$or: [
                 {from: user},
                 {to: user},
-                {type: "message"}
+                {to: "Todos"}
             ]})
             .limit(limit)
-            .sort({_id:-1});
         } else{
             resp = messageCollection.find({$or: [
                 {from: user},
                 {to: user},
-                {type: "message"}
+                {to: "Todos"}
             ]})
-            .sort({_id:-1});
         }
         
         await resp.forEach((user) => {

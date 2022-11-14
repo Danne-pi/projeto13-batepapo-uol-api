@@ -10,8 +10,6 @@ export const PostStatus = (app)=> {
     if (headerValidation){
         res.status(422).send(headerValidation)
         return
-    } else {
-        user = user.toLowerCase()
     }
 
     //Check for user status

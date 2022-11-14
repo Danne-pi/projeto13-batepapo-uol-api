@@ -1,5 +1,6 @@
+import dayjs from "dayjs";
 import joi from "joi";
-import { userCollection } from "./index.js";
+import { messageCollection, userCollection } from "./index.js";
 
 
 export function Validator(validationSchema, requestObject){
@@ -36,10 +37,22 @@ export const messageSchema = joi.object({
 export async function Refresh(timeout){
     const timeNow = Date.now()
     const resp = userCollection.find({})
-    await resp.forEach((user) => {
+    resp.forEach( async (user) => {
       const timeOnline = timeNow - user.lastStatus
       if(timeOnline > timeout) {
         userCollection.deleteOne({_id: user._id})
+        const msg = {
+          from: user.name,
+          to: "Todos",
+          text: "saiu da sala...",
+          type: 'status',
+          time: dayjs().format("hh:mm:ss")
+        }
+        try {
+          await messageCollection.insertOne(msg)
+      } catch (error) {
+        console.log(error)
+      }
       }
     })
 }

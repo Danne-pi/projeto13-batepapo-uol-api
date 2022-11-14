@@ -11,8 +11,6 @@ export const PostParticipants = (app)=> {
     if (validation){
         res.status(422).send(validation)
         return
-    } else {
-        name = name.toLowerCase()        
     }
 
     //Case name already exists
